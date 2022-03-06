@@ -1,61 +1,55 @@
-# Use Github Action to compile Recovery
-```
-Support OFRP, SHRP, TWRP compilation and production
-```
+<h1 align="center"> 利用Github Actions编译REC</h1>
+
+<div align="center">
+	<a href="../..">
+		<img src="demo.jpg" title="Demo" />
+	</a>
+</div>
+
 ---
 
-## Release Notes
-```
-= 2022/02/03
-- Due to the hardware resource limitation of GitHub action, this version cannot be compiled based on AOSP and other source codes of Android 11 and above. If necessary, please use local compilation
+<p align="center">
+	A Github Action to build Recovery
+</p>
 
-= 2021/10/29: 
-- Refactored version 2.0
-- Completely reconstruct the use logic to reduce the difficulty of use
-- Optimize the parameter transfer part, now you can run multiple Workers at the same time
-- TWRP compilation test passed
-- OFRP compilation test passed
-- SHRP compile test passed
-```
+<div align="center">
+	<a href="../../actions">
+		<img src="../../workflows/rec-building/badge.svg" title="Building Status" />
+	</a>
+</div>
 
------
+<br />
 
-## Parameter Description
+由于编译时间较长，建议把<code>[.github/workflows/actions_recovery.yml](.github/workflows/actions_recovery.yml)</code>末尾上传处的`${{ secrets.GITHUB_TOKEN }}`改成自己的[Personal Access Token](https://github.com/settings/tokens)
 
-| Name | Description | Example |
-| ------------ | -------------------- | ------------ |
-| `MANIFEST_TYPE` | Source Type | omni |
-| `MANIFEST_URL` | Source address| https://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git |
-| `MANIFEST_BRANCH` | Source branch | twrp-9.0 |
-| `DEVICE_TREE_URL` | Device address| https://github.com/azwhikaru/twrp_device_xiaomi_archytas |
-| `DEVICE_TREE_BRANCH` | Device branch | twrp-9.0 |
-| `DEVICE_PATH` | Device location | device/xiaomi/Archytas |
-| `DEVICE_NAME` | Model name | Archytas |
+注意保护自己的Personal Access Token，将它放入仓库[Settings](../../settings)里的[Secrets](../../settings/secrets)里后用`${{ secrets.YOUR_TOKEN_NAME }}`来替换`${{ secrets.GITHUB_TOKEN }}`
 
------
+比如我的secret名字叫做work.则使用`${{ secrets.work }}`
 
-## how to use
-```
-For example, your username is: Fun-114514
-```
-#### 1. Click'Fork' in the upper right corner of this warehouse
-![](https://i.bmp.ovh/imgs/2021/10/6b6ed9f29e732372.png)
-#### 2. After waiting for the automatic redirection, you will see your own username
-![](https://i.bmp.ovh/imgs/2021/10/66cfe324c0ebb69b.png)
-#### 3. Click'Actions-Make Recovery'
-![](https://i.bmp.ovh/imgs/2021/10/23896d1b66292047.png)
-#### 4. Click'Run workflow' and fill in according to the above'parameter description'
-![](https://i.bmp.ovh/imgs/2021/10/9cb7871267cf2f53.png)
-#### 5. After filling in, click'Run workflow' to start running
+## 配置
 
------
+配置文件是[config.json](config.json)
 
-## Compilation results
-Can be downloaded at [Release](../../releases)
+| 名称               | 类型    | 描述                                                         |
+| ------------------ | ------- | ------------------------------------------------------------ |
+| `twrp_url`     | String  | Recovery Manifest地址                                        |
+| `twrp_branch`  | String  | Recovery Manifest分支                                        |
+| `git_username` | String  | 您使用Git的用户名                                            |
+| `git_email`    | String  | 您使用Git的邮箱<sub>（Github可使用`Github ID+Github用户名@users.noreply.github.com`）</sub> |
+| `use_own_dt`   | Boolean | 指示是否使用个人设备树<sub>（此项为`true`后以下三项起效）</sub>  |
+| `dt_url`           | String  | 您使用的设备树的地址<sub>（格式:`USER/REPO`）</sub>                |
+| `dt_branch`    | String  | 您使用的设备树的分支                                         |
+| `dt_remote`        | String  | 您使用设备树的存储库<sub>（如`github/gitlab`）</sub>               |
+| `dt_path`      | String  | 指示设备树本地保存位置<sub>（示例`device/huawei/kiwi`）</sub>      |
+| `device_code`  | String  | 您将要编译机型的机型代号                                     |
+| `fix_product`  | Boolean | 指示是否修复无法找到设备的问题                               |
+| `fix_branch`       | String  | 指示修复以上问题所使用的分支                                 |
+| `fix_misscom`  | Boolean | 指示是否修复缺少`device/qcom/common`的问题                   |
+| `fix_busybox`      | Boolean | 指示是否修复缺少`busybox`的问题                              |
 
------
-## Remark
+## 开始
 
-#### TeamWin Recovery Project: https://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git
-#### OrangeFox Recovery Project: https://gitlab.com/OrangeFox/Manifest.git
-#### SKYHAWK Recovery Project: https://github.com/SHRP/platform_manifest_twrp_omni.git
+Fork此仓库后，点击右上角Star就会开始
+
+## 编译结果
+可以在[Release](../../releases)下载
