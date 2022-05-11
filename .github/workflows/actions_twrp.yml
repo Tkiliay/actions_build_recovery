@@ -29,10 +29,7 @@ on:
        description: 'dt_path'
        required: true
        default: 'device/xiaomi/tiffany'
-     twrp_ver:
-       description: 'version'
-       required: true
-       default: '1'
+
 jobs:
   build:
     if: github.event.repository.owner.id == github.event.sender.id
@@ -140,13 +137,13 @@ jobs:
         ls -al
         TWRP_VERSION=$(cat bootable/recovery/variables.h | grep TW_MAIN_VERSION_STR | cut -d\" -s -f2)
         echo "TWRP_VERSION: $TWRP_VERSION"
-        mv out/target/product/${{ steps.var.outputs.device_code }}/recovery.img out/target/product/${{ steps.var.outputs.device_code }}/TWRP-${TWRP_VERSION}-${{ github.event.inputs.twrp_ver }}_${{ steps.var.outputs.device_code }}-${{ steps.var.outputs.day }}.img
+        mv out/target/product/${{ steps.var.outputs.device_code }}/recovery.img out/target/product/${{ steps.var.outputs.device_code }}/TWRP-${TWRP_VERSION}_${{ steps.var.outputs.device_code }}-${{ steps.var.outputs.day }}.img
         echo "::set-output name=TWRP_VERSION::${TWRP_VERSION}"
         
     - name: Upload REC
       uses: softprops/action-gh-release@v1
       with:
-        files: workspace/out/target/product/${{ steps.var.outputs.device_code }}/TWRP-${{ steps.build.outputs.TWRP_VERSION }}-${{ github.event.inputs.twrp_ver }}_${{ steps.var.outputs.device_code }}-${{ steps.var.outputs.day }}.img
+        files: workspace/out/target/product/${{ steps.var.outputs.device_code }}/TWRP-${{ steps.build.outputs.TWRP_VERSION }}_${{ steps.var.outputs.device_code }}-${{ steps.var.outputs.day }}.img
         name: TWRP ${{ steps.build.outputs.TWRP_VERSION }} ${{ steps.var.outputs.device_code }} ${{ steps.var.outputs.day }}
         tag_name: ${{ github.run_id }}
         body: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
