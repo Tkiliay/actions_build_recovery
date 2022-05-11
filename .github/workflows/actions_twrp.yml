@@ -95,10 +95,6 @@ jobs:
         echo "::set-output name=git_username::$(jq -r '.git_username' config-twrp.json)"
         echo "::set-output name=git_email::$(jq -r '.git_email' config-twrp.json)"
         echo "::set-output name=use_own_dt::$(jq -r '.use_own_dt' config-twrp.json)"
-        echo "::set-output name=fix_product::$(jq -r '.fix_product' config-twrp.json)"
-        echo "::set-output name=fix_misscom::$(jq -r '.fix_misscom' config-twrp.json)"
-        echo "::set-output name=fix_busybox::$(jq -r '.fix_busybox' config-twrp.json)"
-        echo "::set-output name=fix_branch::$(jq -r '.fix_branch' config-twrp.json)"
         echo "::set-output name=date::$(date +%F)"
         echo "::set-output name=day::$(date +%Y%m%d)"
       id: var
@@ -126,15 +122,7 @@ jobs:
         repo init --depth=1 -u ${{ steps.var.outputs.twrp_url }} -b ${{ steps.var.outputs.twrp_branch }}
         mkdir .repo/local_manifests
       id: pwd
-      
-    - name: Fix the bug of missing common
-      if: steps.var.outputs.fix_misscom == 'true'
-      run: cp repair/omni-9.0/qcom.xml workspace/.repo/local_manifests/
-      
-    - name: Fix busybox bug
-      if: steps.var.outputs.fix_busybox == 'true'
-      run: cp repair/omni-9.0/busybox.xml workspace/.repo/local_manifests/
-      
+
     - name: Clone your own device tree
       if: steps.var.outputs.use_own_dt == 'true'
       run: |
@@ -150,15 +138,7 @@ jobs:
         cd workspace
         repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
         ls -al
-        
-    - name: Fix cannot locate product
-      if: steps.var.outputs.fix_product == 'true'
-      run: |
-        cd ${{ steps.pwd.outputs.pwd }}/build/core
-        rm -rf product_config.mk
-        sed -i 's!device_code!${{ steps.var.outputs.device_code }}!g' ${{ steps.pwd.outputs.pwd }}/../build/core/${{ steps.var.outputs.fix_branch }}/product_config.mk
-        cp ${{ steps.pwd.outputs.pwd }}/../build/core/${{ steps.var.outputs.fix_branch }}/product_config.mk ${{ steps.pwd.outputs.pwd }}/build/core/product_config.mk
-        
+
     - id: build
       name: Start Building
       run: |
