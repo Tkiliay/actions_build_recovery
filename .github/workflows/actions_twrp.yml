@@ -104,9 +104,6 @@ jobs:
 
     - name: Initialize a Repo client
       run: |
-        ls /usr/bin/python*
-        sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 2
-        sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
         PATH=~/bin:$PATH
         mkdir workspace
         cd workspace
