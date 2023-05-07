@@ -20,7 +20,7 @@ on:
      dt_url:
        description: 'dt_url'
        required: true
-       default: 'laityts/android_device_xiaomi_tiffany-twrp'
+       default: 'Tkiliay/android_device_xiaomi_tiffany-twrp'
      dt_branch:
        description: 'dt_branch'
        required: true
